@@ -3,6 +3,13 @@ run-name :  "Build Gradle project by ${{ github.actor}}"
 
 on:
   push:
+  pull_request:
+    branches:
+        - main
+        - master
+
+permissions:
+  pull-requests: write
 
 jobs:
   build-gradle-project:
@@ -14,9 +21,11 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
+        validate-wrappers: true
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
         build-scan-terms-of-use-agree: "yes"
+        add-job-summary-as-pr-comment: on-failure # Valid values are 'never' (default), 'always', and 'on-failure'
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
